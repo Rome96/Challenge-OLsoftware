@@ -39,6 +39,7 @@ const User = ({ navigation, name, age, lastName, position, photo }) => {
 
 const styles = StyleSheet.create({
   container: {
+    marginHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

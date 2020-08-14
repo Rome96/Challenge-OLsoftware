@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
-import * as ImagePicker from "expo-image-picker";
+import { v4 as uuidv4 } from "uuid";
 import Constants from "expo-constants";
+import {addUser} from'../redux/actions';
+import { useDispatch } from "react-redux";
 import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   Image,
+  Alert,
   Platform,
   TextInput,
   ScrollView,
@@ -19,6 +23,7 @@ import Header from "@Components/header";
 const { width } = Dimensions.get("screen");
 
 const CreateUser = ({ navigation }) => {
+  const dispatch = useDispatch()
   const [Age, setAge] = useState("");
   const [Name, setName] = useState("");
   const [Photo, setPhoto] = useState(null);
@@ -54,6 +59,40 @@ const CreateUser = ({ navigation }) => {
       console.log(E);
     }
   };
+
+  const aggUser = () => {
+    if (
+      Age.trim() === "" ||
+      Name.trim() === "" ||
+      Photo.trim() === "" ||
+      Position.trim() === "" ||
+      LastName.trim() === "" 
+    ) {
+      Alert.alert("Ups!", "Todos los campos son obligatorios", [
+        {
+          text: "Ok.",
+        },
+      ]);
+      return;
+    }
+
+    const user = {
+      age: Age,
+      name: Name,
+      photo: Photo,
+      lastName: LastName,
+      position: Position,
+    }
+    user.id = uuidv4()
+    dispatch(addUser(user))
+    navigation.navigate("UserList");
+    setAge('')
+    setName('')
+    setPhoto(null)
+    setLastName('')
+    setPosition('')
+  } 
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -90,8 +129,8 @@ const CreateUser = ({ navigation }) => {
                 <Text style={styles.label}>Nombre</Text>
                 <TextInput
                   value={Name}
-                  style={styles.input}
                   placeholder={Name}
+                  style={styles.input}
                   onChangeText={(Name) => setName(Name)}
                 />
               </View>
@@ -108,8 +147,9 @@ const CreateUser = ({ navigation }) => {
                 <Text style={styles.label}>Edad</Text>
                 <TextInput
                   value={Age}
-                  style={styles.input}
                   placeholder={Age}
+                  style={styles.input}
+                  keyboardType={'numeric'}
                   onChangeText={(Age) => setAge(Age)}
                 />
               </View>
@@ -124,7 +164,7 @@ const CreateUser = ({ navigation }) => {
               </View>
             </View>
             <View style={{ alignItems: "center" }}>
-              <TouchableOpacity style={styles.btn}>
+              <TouchableOpacity style={styles.btn} onPress={aggUser}>
                 <Text style={styles.textBtn}>Crear</Text>
               </TouchableOpacity>
             </View>
