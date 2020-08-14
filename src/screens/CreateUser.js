@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import Constants from "expo-constants";
-import {addUser} from'../redux/actions';
+import {addUser} from'@Redux/actions';
 import { useDispatch } from "react-redux";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";

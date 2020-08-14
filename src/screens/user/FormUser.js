@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteUser } from "@Redux/actions";
+
 import {
   View,
   Text,
@@ -14,11 +17,18 @@ import Header from "@Components/header";
 const {width} = Dimensions.get('screen')
 
 const FormUser = ({ navigation, route }) => {
-  const { name, age, position, photo, lastName } = route.params.props;
+  const { id, name, age, position, photo, lastName } = route.params.props;
+  const dispatch = useDispatch();
+  const [Age, setAge] = useState(age);
   const [Name, setName] = useState(name);
   const [LastName, setLastName] = useState(lastName);
-  const [Age, setAge] = useState(age);
   const [Position, setPosition] = useState(position);
+
+  const _deleteUser = () => {
+    dispatch(deleteUser(id));
+    navigation.goBack()
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Header back={true} navigation={navigation} title="Detalle usuario" />
@@ -76,6 +86,7 @@ const FormUser = ({ navigation, route }) => {
               <Text style={styles.textBtn}>Actualizar</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={_deleteUser}
               style={[
                 styles.btn,
                 {
@@ -85,7 +96,9 @@ const FormUser = ({ navigation, route }) => {
                 },
               ]}
             >
-              <Text style={[styles.textBtn, {color: '#FF4E4E'}]}>Eliminar</Text>
+              <Text style={[styles.textBtn, { color: "#FF4E4E" }]}>
+                Eliminar
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
