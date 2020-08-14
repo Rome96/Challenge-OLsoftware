@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
 import {
   View,
   Text,
@@ -9,17 +12,48 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from "react-native";
 import Header from "@Components/header";
 
-const {width} = Dimensions.get('screen')
+const { width } = Dimensions.get("screen");
 
-const CreateUser = ({ navigation}) => {
-  const [Name, setName] = useState("");
-  const [LastName, setLastName] = useState("");
+const CreateUser = ({ navigation }) => {
   const [Age, setAge] = useState("");
+  const [Name, setName] = useState("");
+  const [Photo, setPhoto] = useState(null);
+  const [LastName, setLastName] = useState("");
   const [Position, setPosition] = useState("");
+
+  useEffect(() => {
+    getPermissionAsync();
+  }, []);
+
+  const getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  };
+
+  const _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setPhoto(result.uri);
+      }
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -30,12 +64,25 @@ const CreateUser = ({ navigation}) => {
         <ScrollView>
           <View style={styles.container}>
             <View style={{ alignItems: "center" }}>
-              <View style={styles.containerImg}>
-                {/* <Image
-                source={{ uri: photo }}
-                style={{ width: "100%", height: "100%", borderRadius: 140 / 2 }}
-              /> */}
-              </View>
+              <TouchableOpacity
+                style={styles.containerImg}
+                onPress={_pickImage}
+              >
+                {!Photo ? (
+                  <Text style={{ color: "#707070" }}>
+                    Suba una {"\n"} Imagen
+                  </Text>
+                ) : (
+                  <Image
+                    source={{ uri: Photo }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: 140 / 2,
+                    }}
+                  />
+                )}
+              </TouchableOpacity>
               <Text style={styles.position}>{Position}</Text>
             </View>
             <View style={styles.containerForm}>
@@ -91,16 +138,16 @@ const CreateUser = ({ navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 20
+    marginBottom: 20,
   },
   containerImg: {
     width: 140,
     height: 140,
-    borderRadius: 140 / 2,
-    backgroundColor: "gray",
-    justifyContent: "center",
-    alignItems: "center",
     marginVertical: 20,
+    alignItems: "center",
+    borderRadius: 140 / 2,
+    justifyContent: "center",
+    backgroundColor: "#BFBFBF",
   },
   position: {
     fontSize: 25,
