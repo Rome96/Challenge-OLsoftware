@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import User from "../screens/user/User";
 import UserList from "../screens/user/UserList";
-import DetailUser from "../screens/user/DetailUser";
+import FormUser from "../screens/user/FormUser";
 const Stack = createStackNavigator();
 
 const UserSatck = () => {
@@ -16,8 +16,8 @@ const UserSatck = () => {
         }}
       />
       <Stack.Screen
-        name="DetailUser"
-        component={DetailUser}
+        name="FormUser"
+        component={FormUser}
         options={{
           headerShown: false,
         }}

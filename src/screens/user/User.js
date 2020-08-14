@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
-const User = ({ navigation, name, lastName, position, photo }) => {
+const User = ({ navigation, name, age, lastName, position, photo }) => {
   return (
     <View style={styles.container}>
       <View style={styles.containerInfo}>
@@ -26,8 +26,8 @@ const User = ({ navigation, name, lastName, position, photo }) => {
       <TouchableOpacity
         style={styles.containerIcon}
         onPress={() =>
-          navigation.navigate("DetailUser", {
-            props: { name, position, photo, lastName },
+          navigation.navigate("FormUser", {
+            props: { name, age, position, photo, lastName },
           })
         }
       >

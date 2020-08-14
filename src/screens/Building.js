@@ -1,10 +1,11 @@
 import React from 'react'
 import {View, Text} from 'react-native'
+import Header from "@Components/header";
 
 const Building = () => {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>building</Text>
+    <View style={{ flex: 1}}>
+      <Header title='Building'/>
     </View>
   );
 }
