@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import User from "./User";
 import { FontAwesome } from "@expo/vector-icons";
 import Header from "@Components/header";
@@ -7,21 +7,21 @@ import { View, Text, FlatList, TextInput, StyleSheet } from "react-native";
 
 const UserList = ({ navigation }) => {
   const users = useSelector((state) => state.users);
-  const [user, setUser] = useState(users)
+  const [user, setUser] = useState([]);
   const [value, onChangeText] = useState("");
 
   const handleSearch = (text) => {
     onChangeText(text);
-    const UserList = user.filter((item) => {
-      const itemData = `${item.name.toUpperCase()} ${item.lastName.toUpperCase()}`;
+    const userList = users.filter((item) => {
+      const itemData = `
+        ${item.name.toUpperCase()}
+        ${item.lastName.toUpperCase()}
+        ${item.position.toUpperCase()}
+      `;
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
-    if (text === "") {
-      setUser(users);
-    } else {
-      setUser(UserList);
-    }
+    setUser(userList);
   };
 
   return (
@@ -39,7 +39,7 @@ const UserList = ({ navigation }) => {
         />
       </View>
       <FlatList
-        data={user}
+        data={!value ? users : user}
         renderItem={({ item }) => <User {...item} navigation={navigation} />}
         keyExtractor={(item) => item.id}
       />
