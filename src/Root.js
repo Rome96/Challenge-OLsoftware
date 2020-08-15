@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 export default function Root() {
   const [logged, setLogged] = useState(true);
   const users = useSelector((state) => state.users);
-  console.log("USEERS:", users);
   return (
     <>
       <StatusBar/>

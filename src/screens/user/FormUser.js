@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteUser } from "@Redux/actions";
-
+import { deleteUser, updateUser } from "@Redux/actions";
 import {
   View,
   Text,
@@ -17,10 +16,11 @@ import Header from "@Components/header";
 const {width} = Dimensions.get('screen')
 
 const FormUser = ({ navigation, route }) => {
-  const { id, name, age, position, photo, lastName } = route.params.props;
+  const { id, name, age, position, photo, lastName, index } = route.params.props;
   const dispatch = useDispatch();
   const [Age, setAge] = useState(age);
   const [Name, setName] = useState(name);
+  const [Photo, setPhoto] = useState(photo);
   const [LastName, setLastName] = useState(lastName);
   const [Position, setPosition] = useState(position);
 
@@ -29,6 +29,33 @@ const FormUser = ({ navigation, route }) => {
     navigation.goBack()
   }
 
+  const _updateUser = () => {
+    if (
+      Age.trim() === "" ||
+      Name.trim() === "" ||
+      Photo.trim() === "" ||
+      Position.trim() === "" ||
+      LastName.trim() === ""
+    ) {
+      Alert.alert("Ups!", "Todos los campos son obligatorios", [
+        {
+          text: "Ok.",
+        },
+      ]);
+      return;
+    }
+    const user = {
+      id: id,
+      age: Age,
+      name: Name,
+      photo: Photo,
+      lastName: LastName,
+      position: Position,
+    };
+
+    dispatch(updateUser(user))
+    navigation.navigate("UserList");
+  }
   return (
     <View style={{ flex: 1 }}>
       <Header back={true} navigation={navigation} title="Detalle usuario" />
@@ -82,7 +109,7 @@ const FormUser = ({ navigation, route }) => {
             </View>
           </View>
           <View style={{ alignItems: "center" }}>
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity style={styles.btn} onPress={_updateUser}>
               <Text style={styles.textBtn}>Actualizar</Text>
             </TouchableOpacity>
             <TouchableOpacity

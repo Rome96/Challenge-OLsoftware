@@ -40,7 +40,7 @@ const UserList = ({ navigation }) => {
       </View>
       <FlatList
         data={!value ? users : user}
-        renderItem={({ item }) => <User {...item} navigation={navigation} />}
+        renderItem={({ item, index }) => <User index={index} {...item} navigation={navigation} />}
         keyExtractor={(item) => item.id}
       />
     </View>

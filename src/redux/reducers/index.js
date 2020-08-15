@@ -1,4 +1,4 @@
-import {ADD_USER, DELETE_USER} from '../constants/actions-types'
+import {ADD_USER, UPDATE_USER, DELETE_USER} from '../constants/actions-types'
 
 const initialState = {
   users: [
@@ -41,6 +41,25 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         users: state.users.filter((user) => user.id !== action.payload),
       };
+    case UPDATE_USER: 
+      return {
+        ...state,
+        users: state.users.map(user => {
+          if (user.id !== action.payload.id) {
+            return user
+          } else {
+            return {
+              ...user,
+              id: action.payload.id,
+              age: action.payload.age,
+              name: action.payload.name,
+              photo: action.payload.photo,
+              lastName: action.payload.lastName,
+              position: action.payload.position,
+            }
+          }
+        })
+      }
     default:
       break;
   }

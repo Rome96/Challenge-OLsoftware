@@ -1,19 +1,28 @@
-import { ADD_USER, DELETE_USER } from "../constants/actions-types";
+import { ADD_USER, DELETE_USER, UPDATE_USER } from "../constants/actions-types";
 
 const addUser = (payload) => {
   return {
-    type: ADD_USER,
     payload,
+    type: ADD_USER,
   };
 };
 
+const updateUser = (payload) => {
+  return {
+    payload,
+    type: UPDATE_USER,
+  }
+}
+
 const deleteUser = (payload) => {
   return {
-    type: DELETE_USER,
     payload,
+    type: DELETE_USER,
   };
 };
+
 export {
   addUser,
+  updateUser,
   deleteUser
 }
