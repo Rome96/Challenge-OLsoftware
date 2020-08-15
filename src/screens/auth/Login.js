@@ -1,8 +1,11 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { useDispatch } from "react-redux";
+import { logged } from "@Redux/actions";
 import {
   View,
   Text,
   Image,
+  Alert,
   TextInput,
   Dimensions,
   StyleSheet,
@@ -12,6 +15,20 @@ import {
 const {width, height} = Dimensions.get('screen')
 
 const Login = ({navigation}) => {
+  const dispatch = useDispatch()
+  const [user, setUser] = useState('')
+  const [password, setPassword] = useState('')
+
+  const _logged = () => {
+    if (
+      user.trim() === "" ||
+      password.trim() === ""
+    ) {
+      Alert.alert("Ups!", "Todos los campos son obligatorios");
+      return;
+    }
+    dispatch(logged(true))
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containerImg}>
@@ -21,22 +38,40 @@ const Login = ({navigation}) => {
         />
       </View>
       <View>
-        <TextInput style={styles.textInput} placeholder="Usuario" />
-        <TextInput style={styles.textInput} placeholder="Contraseña" />
-        <TouchableOpacity style={[styles.btn, { backgroundColor: "#FF4E4E" }]}>
+        <TextInput
+          value={user}
+          placeholder="Usuario"
+          style={styles.textInput}
+          onChangeText={(text) => setUser(text)}
+        />
+        <TextInput
+          value={password}
+          secureTextEntry
+          style={styles.textInput}
+          placeholder="Contraseña"
+          onChangeText={(text) => setPassword(text)}
+        />
+        <TouchableOpacity
+          onPress={_logged}
+          style={[styles.btn, { backgroundColor: "#FF4E4E" }]}
+        >
           <Text style={[styles.textBtn, { color: "#FFF" }]}>
             Iniciar sesión
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.btn, { borderColor: "#FF4E4E", borderWidth: 1 }]}>
+        <TouchableOpacity
+          style={[styles.btn, { borderColor: "#FF4E4E", borderWidth: 1 }]}
+        >
           <Text style={[styles.textBtn, { color: "#FF4E4E" }]}>
             Registrarse
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={{
-        marginTop: width - 200
-      }}>
+      <View
+        style={{
+          marginTop: width - 200,
+        }}
+      >
         <Text style={styles.textFooter}>Powerared by OLSoftware</Text>
       </View>
     </View>

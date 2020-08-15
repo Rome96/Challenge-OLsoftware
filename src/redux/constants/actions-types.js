@@ -1,9 +1,11 @@
 const ADD_USER = "ADD_USER";
+const IS_LOGIN = "IS_LOGIN";
 const UPDATE_USER = "UPDATE_USER";
 const DELETE_USER = "DELETE_USER";
 
 export {
   ADD_USER,
+  IS_LOGIN,
   DELETE_USER,
   UPDATE_USER,
 }

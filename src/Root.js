@@ -8,13 +8,12 @@ import AuthSatck from "@Navigations/AuthStack";
 import { useSelector } from "react-redux";
 
 export default function Root() {
-  const [logged, setLogged] = useState(true);
-  const users = useSelector((state) => state.users);
+  const isLogin = useSelector((state) => state.isLogin);
   return (
     <>
-      <StatusBar/>
+      <StatusBar />
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>{!logged ? <AuthSatck /> : <MyTabs />}</View>
+        <View style={{ flex: 1 }}>{!isLogin ? <AuthSatck /> : <MyTabs />}</View>
       </SafeAreaView>
     </>
   );

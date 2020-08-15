@@ -68,11 +68,7 @@ const CreateUser = ({ navigation }) => {
       Position.trim() === "" ||
       LastName.trim() === "" 
     ) {
-      Alert.alert("Ups!", "Todos los campos son obligatorios", [
-        {
-          text: "Ok.",
-        },
-      ]);
+      Alert.alert("Ups!", "Todos los campos son obligatorios");
       return;
     }
 

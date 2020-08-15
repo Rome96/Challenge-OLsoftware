@@ -1,6 +1,12 @@
-import {ADD_USER, UPDATE_USER, DELETE_USER} from '../constants/actions-types'
+import {
+  ADD_USER,
+  IS_LOGIN,
+  UPDATE_USER,
+  DELETE_USER
+} from '../constants/actions-types'
 
 const initialState = {
+  isLogin: false,
   users: [
     {
       id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -31,6 +37,11 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case IS_LOGIN: 
+      return {
+        ...state,
+        isLogin: action.payload
+      };
     case ADD_USER:
       return {
         ...state,
