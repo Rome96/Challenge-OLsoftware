@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import Constants from "expo-constants";
+import Header from "@Components/header";
 import { useDispatch } from "react-redux";
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
+import React, { useState, useEffect } from "react";
 import { deleteUser, updateUser } from "@Redux/actions";
 import {
   View,
@@ -9,14 +13,21 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import Header from "@Components/header";
 
-const {width} = Dimensions.get('screen')
+const { width } = Dimensions.get("screen");
 
 const FormUser = ({ navigation, route }) => {
-  const { id, name, age, position, photo, lastName, index } = route.params.props;
+  const {
+    id,
+    name,
+    age,
+    position,
+    photo,
+    lastName,
+    index,
+  } = route.params.props;
   const dispatch = useDispatch();
   const [Age, setAge] = useState(age);
   const [Name, setName] = useState(name);
@@ -24,10 +35,40 @@ const FormUser = ({ navigation, route }) => {
   const [LastName, setLastName] = useState(lastName);
   const [Position, setPosition] = useState(position);
 
+  useEffect(() => {
+    getPermissionAsync();
+  }, []);
+
+  const getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  };
+
+  const _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setPhoto(result.uri);
+      }
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
+
   const _deleteUser = () => {
     dispatch(deleteUser(id));
-    navigation.goBack()
-  }
+    navigation.goBack();
+  };
 
   const _updateUser = () => {
     if (
@@ -53,21 +94,29 @@ const FormUser = ({ navigation, route }) => {
       position: Position,
     };
 
-    dispatch(updateUser(user))
+    dispatch(updateUser(user));
     navigation.navigate("UserList");
-  }
+  };
   return (
     <View style={{ flex: 1 }}>
       <Header back={true} navigation={navigation} title="Detalle usuario" />
       <ScrollView>
         <View style={styles.container}>
           <View style={{ alignItems: "center" }}>
-            <View style={styles.containerImg}>
-              <Image
-                source={{ uri: photo }}
-                style={{ width: "100%", height: "100%", borderRadius: 140 / 2 }}
-              />
-            </View>
+            <TouchableOpacity style={styles.containerImg} onPress={_pickImage}>
+              {!Photo ? (
+                <Text style={{ color: "#707070" }}>Suba una {"\n"} Imagen</Text>
+              ) : (
+                <Image
+                  source={{ uri: Photo }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 140 / 2,
+                  }}
+                />
+              )}
+            </TouchableOpacity>
             <Text style={styles.position}>{Position}</Text>
           </View>
           <View style={styles.containerForm}>
